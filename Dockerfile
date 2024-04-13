@@ -11,4 +11,4 @@ COPY calculator.py /app/
 EXPOSE 8085
 
 # Run app.py when the container launches
-CMD ["python", "app.py"]
+CMD ["python", "calculator.py"]
