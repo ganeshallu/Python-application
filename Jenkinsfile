@@ -1,44 +1,28 @@
 pipeline {
     agent any
 
-    environment {
-        AWS_DEFAULT_REGION = 'us-east-1'
-    }
-
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main',
-                url: 'https://github.com/ganeshallu/Python-application.git'
+                // Checkout the source code from Git repository
+                git branch: 'main', url: 'https://github.com/ganeshallu/Python-application.git'
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build') {
             steps {
+                // Build your Docker image
                 script {
                     docker.build('calculator-app')
                 }
             }
         }
 
-        stage('Push Docker Image to Registry') {
+        stage('Run Docker Container') {
             steps {
+                // Run the Docker container, mapping port 8085
                 script {
-                    docker.withRegistry('https://471112615702.dkr.ecr.us-east-1.amazonaws.com', 'ecr:AWS EKS') {
-                        docker.image('calculator-app').push('latest')
-                    }
-                }
-            }
-        }
-
-        stage('Deploy to EKS') {
-            steps {
-                script {
-                    kubernetesDeploy(
-                        kubeconfigId: 'kubeconfig',
-                        configs: 'deployment.yaml',
-                        enableConfigSubstitution: true
-                    )
+                    docker.image('calculator-app').run('-p 8085:8085 --name calculator-container')
                 }
             }
         }
