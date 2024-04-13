@@ -24,7 +24,7 @@ pipeline {
         stage('Push Docker Image to Registry') {
             steps {
                 script {
-                    docker.withRegistry('https://471112615702.dkr.ecr.us-east-1.amazonaws.com', 'ecr:your-region') {
+                    docker.withRegistry('https://471112615702.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1') {
                         docker.image('calculator-app').push('latest')
                     }
                 }
