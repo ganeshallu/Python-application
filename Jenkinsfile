@@ -12,12 +12,19 @@ pipeline {
             }
         }
 
-        stage('Build and Push Docker Image') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build('my-python-app')
+                    docker.build('calculator-app')
+                }
+            }
+        }
+
+        stage('Push Docker Image to Registry') {
+            steps {
+                script {
                     docker.withRegistry('https://471112615702.dkr.ecr.us-east-1.amazonaws.com', 'ecr:your-region') {
-                        docker.image('my-python-app').push('latest')
+                        docker.image('calculator-app').push('latest')
                     }
                 }
             }
